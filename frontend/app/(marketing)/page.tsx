@@ -11,7 +11,9 @@ const page = () => {
   return (
     <>
     <HeroSection/>
-    <TrustBadge/>
+    <div className="relative z-10 mt-8 w-full px-4 sm:px-6 md:mt-10">
+      <TrustBadge/>
+    </div>
     <Pricing/>
     <IncludedFeatures/>
     <MigrationSection/>

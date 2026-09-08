@@ -1,6 +1,10 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
+import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion";
+import { cn } from "@/lib/utils";
 
 const faqs = [
   {
@@ -30,52 +34,90 @@ const faqs = [
   },
 ];
 
+function canHover() {
+  return typeof window !== "undefined" && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+}
+
 export default function FAQAndCTA() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
   return (
     <section className="bg-white py-16 md:py-24 text-black space-y-20">
-      
-      {/* FAQ Section - Maintained inside max-w-5xl */}
       <div className="mx-auto max-w-5xl px-6 space-y-8">
         <div className="text-center space-y-3">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl lg:text-5xl">
             Frequently Asked Questions
           </h2>
           <p className="text-gray-500 text-sm md:text-base">
-            Got questions? We've got answers to help you choose the best web hosting plan.
+            Got questions? We&apos;ve got answers to help you choose the best web hosting plan.
           </p>
         </div>
 
-        <Accordion className="w-full space-y-3">
-          {faqs.map((faq, index) => (
-            <AccordionItem
-              key={index}
-              value={`item-${index}`}
-              className="rounded-xl border border-gray-200 px-6 bg-white shadow-xs"
-            >
-              <AccordionTrigger className="text-left font-semibold text-gray-900 text-base md:text-lg hover:no-underline py-4">
-                {faq.question}
-              </AccordionTrigger>
-              <AccordionContent className="text-gray-600 text-sm md:text-base leading-relaxed pb-4">
-                {faq.answer}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+        <div
+          className="w-full space-y-3"
+          onMouseLeave={() => {
+            if (canHover()) setOpenIndex(null);
+          }}
+        >
+          {faqs.map((faq, index) => {
+            const isOpen = openIndex === index;
+
+            return (
+              <div
+                key={faq.question}
+                onMouseEnter={() => setOpenIndex(index)}
+                className={cn(
+                  "rounded-xl border bg-white px-6 shadow-xs transition-colors duration-300",
+                  isOpen ? "border-[#4169E1]/30 bg-[#f4f7ff]" : "border-gray-200"
+                )}
+              >
+                <button
+                  type="button"
+                  aria-expanded={isOpen}
+                  onFocus={() => setOpenIndex(index)}
+                  onClick={() => {
+                    if (canHover()) return;
+                    setOpenIndex((current) => (current === index ? null : index));
+                  }}
+                  className="flex w-full items-center justify-between gap-4 py-4 text-left font-semibold text-gray-900 text-base md:text-lg"
+                >
+                  <span>{faq.question}</span>
+                  <ChevronDown
+                    className={cn(
+                      "size-4 shrink-0 text-muted-foreground transition-transform duration-300",
+                      isOpen && "rotate-180"
+                    )}
+                  />
+                </button>
+                <div
+                  className={cn(
+                    "grid transition-[grid-template-rows] duration-300 ease-out",
+                    isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                  )}
+                >
+                  <div className="overflow-hidden">
+                    <p className="pb-4 text-gray-600 text-sm md:text-base leading-relaxed">
+                      {faq.answer}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      {/* CTA Banner Section - Expanded Container */}
       <div className="mx-auto max-w-[95%] sm:max-w-[90%] lg:max-w-7xl px-4 sm:px-6">
-        <div className="w-full relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 p-8 sm:p-12 lg:p-16 text-white shadow-xl">
-          {/* Subtle diagonal stripe pattern overlay */}
-          <div 
-            className="absolute inset-0 opacity-10 pointer-events-none"
+        <div className="relative w-full overflow-hidden rounded-3xl bg-gradient-to-r from-[#061433] via-[#1e3a8a] to-[#4169E1] p-8 sm:p-12 lg:p-16 text-white shadow-xl">
+          <div
+            className="pointer-events-none absolute inset-0 opacity-10"
             style={{
-              backgroundImage: `repeating-linear-gradient(45deg, #ffffff 0, #ffffff 1px, transparent 0, transparent 10px)`
+              backgroundImage: `repeating-linear-gradient(45deg, #ffffff 0, #ffffff 1px, transparent 0, transparent 10px)`,
             }}
           />
 
           <div className="relative z-10 max-w-2xl space-y-6">
-            <p className="text-sm font-medium tracking-wide text-blue-100">
+            <p className="text-sm font-medium tracking-wide text-white/80">
               Big Savings. Simple Pricing.
             </p>
 
@@ -83,22 +125,21 @@ export default function FAQAndCTA() {
               Save up to 80% on web hosting plans today.
             </h3>
 
-            <div className="pt-2 space-y-3">
+            <div className="space-y-3 pt-2">
               <Button
                 size="lg"
-                className="bg-white text-blue-600 hover:bg-blue-50 font-semibold rounded-xl px-8 py-6 text-base shadow-md"
+                className="rounded-xl bg-white px-8 py-6 text-base font-semibold text-[#1e3a8a] shadow-md hover:bg-blue-50"
               >
                 <Link href="#pricing">Claim Offer Now</Link>
               </Button>
 
-              <p className="text-xs text-blue-100/90 font-medium">
+              <p className="text-xs font-medium text-white/80">
                 30-day money-back guarantee • No hidden charges
               </p>
             </div>
           </div>
         </div>
       </div>
-
     </section>
   );
 }

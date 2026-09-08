@@ -9,7 +9,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
   console.log(pathname);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden">
+    <div className="relative min-h-screen overflow-x-clip bg-gradient-to-b from-white via-[#eef2ff] to-white">
       {pathname === "/" && (
         <div className="hidden md:block absolute inset-x-0 top-0 h-[80vh] pointer-events-none z-0 overflow-hidden">
           <DottedGlowBackground
@@ -17,10 +17,10 @@ const layout = ({ children }: { children: React.ReactNode }) => {
             opacity={2}
             gap={10}
             radius={2}
-            colorLightVar="--color-neutral-500"
-            glowColorLightVar="--color-neutral-600"
-            colorDarkVar="--color-neutral-500"
-            glowColorDarkVar="--color-sky-800"
+            colorLightVar="--color-blue-300"
+            glowColorLightVar="--color-blue-700"
+            colorDarkVar="--color-blue-300"
+            glowColorDarkVar="--color-blue-800"
             backgroundOpacity={0}
             speedMin={0.8}
             speedMax={1.2}

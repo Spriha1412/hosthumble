@@ -1,12 +1,13 @@
-'use client'
+﻿'use client'
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Check, ChevronDown } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { cn } from '@/lib/utils'
 
 type BillingCycle = '1' | '12' | '36'
 
@@ -16,6 +17,14 @@ interface PlanData {
     discount?: string
     totalPay?: string
     badgeNote?: string
+}
+
+interface PlanConfig {
+    key: 'Starter' | 'Premium' | 'Business' | 'Cloud Startup'
+    title: string
+    description: string
+    features: string[]
+    popular?: boolean
 }
 
 const featureDescriptions: Record<string, string> = {
@@ -104,79 +113,243 @@ const plansData: Record<BillingCycle, Record<string, PlanData>> = {
     },
 }
 
-function FeatureItem({ item }: { item: string }) {
+const planConfigs: PlanConfig[] = [
+    {
+        key: 'Starter',
+        title: 'Starter',
+        description: 'Great for first-time users.',
+        features: [
+            '1 website',
+            'Free domain for 1 year',
+            '10 GB NVMe storage',
+            '1 email account Free forever',
+            'Daily backups',
+            'Free SSL for your website',
+            'WordPress ready',
+            'AI builder 50 credits',
+            'AI agent for WordPress',
+            'Priority 24/7 expert support',
+        ],
+    },
+    {
+        key: 'Premium',
+        title: 'Premium',
+        description: 'Best for blogs & startup websites.',
+        popular: true,
+        features: [
+            '25 websites',
+            'Free domain for 1 year',
+            '50 GB NVMe storage',
+            '50 email accounts Free forever',
+            'Daily backups',
+            'Free SSL for every website',
+            'WordPress ready',
+            'AI builder 50 credits',
+            'AI agent for WordPress',
+            'Priority 24/7 expert support',
+        ],
+    },
+    {
+        key: 'Business',
+        title: 'Business',
+        description: 'Node.js ready hosting.',
+        features: [
+            '50 websites',
+            'Free domain for 1 year',
+            '100 GB NVMe storage',
+            '150 email accounts Free forever',
+            'Daily & On-Demand Backups',
+            'Free SSL for every website',
+            'WordPress ready',
+            'AI builder 50 credits',
+            'AI agent for WordPress',
+            'Priority 24/7 expert support',
+            '5 Node.js web apps New',
+        ],
+    },
+    {
+        key: 'Cloud Startup',
+        title: 'Cloud Startup',
+        description: '20x more power with cloud hosting.',
+        features: [
+            '50 websites',
+            'Free domain for 1 year',
+            '100 GB NVMe storage',
+            '150 email accounts Free forever',
+            'Daily & On-Demand Backups',
+            'Free SSL for every website',
+            'WordPress ready',
+            'AI builder 50 credits',
+            'AI agent for WordPress',
+            'Priority 24/7 expert support',
+            '5 Node.js web apps New',
+        ],
+    },
+]
+
+function FeatureItem({ item, inverted = false }: { item: string; inverted?: boolean }) {
     const description = featureDescriptions[item] || 'Included with this hosting plan.'
 
     return (
-        <li className="border-b border-dotted border-gray-200 pb-2 last:border-0 last:pb-0">
-            <TooltipProvider>
-                <Tooltip>
-                    <TooltipTrigger className="w-full text-left">
-                        <div className="flex w-full cursor-help items-center gap-2 rounded transition-colors hover:text-black/70">
-                            <Check className="size-3 shrink-0 text-black" />
-                            <span>{item}</span>
-                        </div>
-                    </TooltipTrigger>
-                    <TooltipContent side="top" className="max-w-[240px] bg-black p-2.5 text-xs text-white leading-snug shadow-xl">
-                        <p>{description}</p>
-                    </TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
+        <li className={cn('border-b border-dotted pb-2 last:border-0 last:pb-0', inverted ? 'border-white/25' : 'border-gray-200')}>
+            <Tooltip>
+                <TooltipTrigger className="w-full text-left">
+                    <div className={cn('flex w-full cursor-help items-center gap-2 rounded transition-colors', inverted ? 'hover:text-white/80' : 'hover:text-black/70')}>
+                        <Check className={cn('size-3 shrink-0', inverted ? 'text-white' : 'text-black')} />
+                        <span>{item}</span>
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="max-w-[240px] bg-black p-2.5 text-xs text-white leading-snug shadow-xl">
+                    <p>{description}</p>
+                </TooltipContent>
+            </Tooltip>
         </li>
+    )
+}
+
+function PlanCard({
+    plan,
+    currentData,
+}: {
+    plan: PlanConfig
+    currentData: PlanData
+}) {
+    const popular = Boolean(plan.popular)
+
+    return (
+        <Card
+            className={cn(
+                'pricing-stack-card flex h-full w-full shrink-0 cursor-pointer flex-col justify-between transition-all duration-300 ease-out md:hover:-translate-y-2 md:hover:scale-[1.03] md:hover:shadow-2xl',
+                popular
+                    ? 'relative overflow-visible border-transparent bg-gradient-to-br from-[#061433] via-[#1e3a8a] to-[#4169E1] text-white shadow-xl'
+                    : 'border-gray-200 bg-white text-black md:hover:bg-slate-50'
+            )}
+        >
+            {popular && (
+                <span className="absolute inset-x-0 -top-3 z-10 mx-auto flex h-6 w-fit items-center rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#1e3a8a] shadow-md">
+                    MOST POPULAR
+                </span>
+            )}
+
+            <div>
+                <CardHeader>
+                    <CardTitle className={cn('font-medium', popular ? 'text-white' : 'text-black')}>{plan.title}</CardTitle>
+                    <CardDescription className={cn('text-sm', popular ? 'text-white/80' : 'text-black/70')}>{plan.description}</CardDescription>
+
+                    {currentData.discount && (
+                        <span className={cn('mt-2 w-fit rounded-full px-2 py-0.5 text-xs font-medium', popular ? 'bg-white/15 text-white' : 'bg-green-100 text-green-700')}>
+                            {currentData.discount}
+                        </span>
+                    )}
+
+                    <div className="my-3 flex items-baseline gap-2">
+                        {currentData.originalPrice && (
+                            <span className={cn('text-sm line-through', popular ? 'text-white/50' : 'text-black/50')}>₹{currentData.originalPrice}</span>
+                        )}
+                        <span className={cn('text-2xl font-semibold', popular ? 'text-white' : 'text-black')}>₹{currentData.price}</span>
+                        <span className={cn('text-sm', popular ? 'text-white/80' : 'text-black/70')}>/mo</span>
+                    </div>
+
+                    {currentData.totalPay && (
+                        <CardDescription className={cn('mt-1 text-xs', popular ? 'text-white/75' : 'text-black/70')}>{currentData.totalPay}</CardDescription>
+                    )}
+                    {currentData.badgeNote && (
+                        <CardDescription className={cn('mt-1 text-xs font-medium', popular ? 'text-white' : 'text-black')}>{currentData.badgeNote}</CardDescription>
+                    )}
+                </CardHeader>
+
+                <CardContent className="space-y-4">
+                    <hr className={cn('border-dashed', popular ? 'border-white/30' : 'border-gray-200')} />
+                    <ul className={cn('list-outside space-y-3 text-sm', popular ? 'text-white' : 'text-black')}>
+                        {plan.features.map((item, index) => (
+                            <FeatureItem key={index} item={item} inverted={popular} />
+                        ))}
+                    </ul>
+                </CardContent>
+            </div>
+
+            <CardFooter className="mt-auto pt-4">
+                <Button className={cn('w-full', popular ? 'bg-white text-[#1e3a8a] hover:bg-blue-50' : 'bg-black text-white hover:bg-black/90')}>
+                    <Link href="/">Choose Plan</Link>
+                </Button>
+            </CardFooter>
+        </Card>
     )
 }
 
 export default function Pricing() {
     const [billingCycle, setBillingCycle] = useState<BillingCycle>('1')
-    const [activeCardIndex, setActiveCardIndex] = useState(0)
+    const [activeCardIndex, setActiveCardIndex] = useState(1)
     const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-    // Handle scroll position to activate active dot
     const handleScroll = () => {
         if (!scrollContainerRef.current) return
         const container = scrollContainerRef.current
-        const scrollPosition = container.scrollLeft
-        const cardWidth = container.firstElementChild ? (container.firstElementChild as HTMLElement).offsetWidth + 24 : container.clientWidth
-        const newIndex = Math.round(scrollPosition / cardWidth)
-        setActiveCardIndex(Math.min(Math.max(newIndex, 0), 3))
+        const cards = Array.from(container.children) as HTMLElement[]
+        if (cards.length === 0) return
+        const center = container.scrollLeft + container.clientWidth / 2
+        let closest = 0
+        let closestDistance = Number.POSITIVE_INFINITY
+        cards.forEach((card, index) => {
+            const cardCenter = card.offsetLeft + card.offsetWidth / 2
+            const distance = Math.abs(center - cardCenter)
+            if (distance < closestDistance) {
+                closestDistance = distance
+                closest = index
+            }
+        })
+        setActiveCardIndex(closest)
     }
 
-    // Scroll directly to clicked dot card
-    const scrollToCard = (index: number) => {
-        if (!scrollContainerRef.current) return
+    const scrollToCard = (index: number, behavior: ScrollBehavior = 'smooth') => {
         const container = scrollContainerRef.current
-        const cardWidth = container.firstElementChild ? (container.firstElementChild as HTMLElement).offsetWidth + 24 : container.clientWidth
-        container.scrollTo({
-            left: cardWidth * index,
-            behavior: 'smooth',
-        })
+        const card = container?.children[index] as HTMLElement | undefined
+        if (!container || !card) return
+        const left = card.offsetLeft - (container.clientWidth - card.offsetWidth) / 2
+        container.scrollTo({ left, behavior })
+        setActiveCardIndex(index)
     }
+
+    useEffect(() => {
+        const run = () => {
+            if (window.matchMedia('(max-width: 767px)').matches) {
+                scrollToCard(1, 'auto')
+            }
+        }
+        const frame = requestAnimationFrame(run)
+        const timeout = window.setTimeout(run, 80)
+        return () => {
+            cancelAnimationFrame(frame)
+            window.clearTimeout(timeout)
+        }
+    }, [])
 
     return (
-        <section className="py-10 text-white w-full md:py-15 overflow-hidden" id="pricing">
+        <section className="w-full overflow-x-clip py-10 text-slate-900 md:overflow-visible md:py-15" id="pricing">
             <div className="mx-auto max-w-[95%] px-4 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-3xl space-y-6 text-center">
                     <h1 className="text-4xl font-semibold text-black lg:text-5xl">Pricing that Scales with You</h1>
                     <p className="text-black">HostHumble provide Four Types of Plans Free to Premium Plans. Find Best plan according to your needs.</p>
                     <div className="flex justify-center pt-4">
+                        <div className="w-full max-w-md px-1">
                         <DropdownMenu>
-                            <DropdownMenuTrigger>
-                                <Button
-                                    variant="outline"
-                                    className="h-14 w-[250px] justify-between border-gray-200 !bg-white px-4 text-base font-semibold text-black shadow-lg hover:!bg-gray-100 hover:!text-black focus-visible:ring-2 focus-visible:ring-black"
-                                >
-                                    {billingCycle === "1"
-                                        ? "1 Month"
-                                        : billingCycle === "12"
-                                            ? "12 Months"
-                                            : "36 Months"}
-                                    <ChevronDown className="size-4 text-black" />
-                                </Button>
+                            <DropdownMenuTrigger
+                                className={cn(
+                                    buttonVariants({ variant: 'outline' }),
+                                    'h-14 w-full justify-between border-gray-200 !bg-white px-6 text-base font-semibold text-black shadow-lg hover:!bg-gray-100 hover:!text-black focus-visible:ring-2 focus-visible:ring-[#1e3a8a]'
+                                )}
+                            >
+                                {billingCycle === "1"
+                                    ? "1 Month"
+                                    : billingCycle === "12"
+                                        ? "12 Months"
+                                        : "36 Months"}
+                                <ChevronDown className="size-4 text-black" />
                             </DropdownMenuTrigger>
 
                             <DropdownMenuContent
                                 align="center"
-                                className="w-[250px] border-gray-200 bg-white text-black shadow-xl"
+                                className="border-gray-200 bg-white text-black shadow-xl"
                             >
                                 <DropdownMenuRadioGroup
                                     value={billingCycle}
@@ -203,281 +376,36 @@ export default function Pricing() {
                                 </DropdownMenuRadioGroup>
                             </DropdownMenuContent>
                         </DropdownMenu>
+                        </div>
                     </div>
                 </div>
 
-                {/* Mobile Horizontal Scroll Slider / Desktop Grid Container */}
+                <TooltipProvider>
                 <div
                     ref={scrollContainerRef}
                     onScroll={handleScroll}
-                    className="mt-8 flex gap-6 overflow-x-auto snap-x snap-mandatory pt-4 pb-6 scrollbar-none md:mt-16 md:grid md:grid-cols-2 md:overflow-visible md:pb-0 lg:grid-cols-4"
+                    className="-mx-4 mt-8 flex gap-4 overflow-x-auto snap-x snap-mandatory px-[11vw] pt-5 pb-6 scrollbar-none md:mx-0 md:mt-16 md:grid md:grid-cols-2 md:gap-6 md:overflow-visible md:px-0 md:pb-0 lg:grid-cols-4"
                 >
-                    {/* Starter Card */}
-                    {(() => {
-                        const currentData = plansData[billingCycle]['Starter']
-                        return (
-                            <Card className="min-w-[85vw] sm:min-w-[320px] md:min-w-0 snap-center shrink-0 flex flex-col justify-between border-gray-200 bg-white text-black transition-all duration-300 hover:-translate-y-2 hover:scale-105 hover:shadow-2xl cursor-pointer">
-                                <div>
-                                    <CardHeader>
-                                        <CardTitle className="font-medium text-black">Starter</CardTitle>
-                                        <CardDescription className="text-sm text-black/70">Great for first-time users.</CardDescription>
-
-                                        {currentData.discount && (
-                                            <span className="mt-2 w-fit rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
-                                                {currentData.discount}
-                                            </span>
-                                        )}
-
-                                        <div className="my-3 flex items-baseline gap-2">
-                                            {currentData.originalPrice && (
-                                                <span className="text-sm text-black/50 line-through">₹{currentData.originalPrice}</span>
-                                            )}
-                                            <span className="text-2xl font-semibold text-black">₹{currentData.price}</span>
-                                            <span className="text-sm text-black/70">/mo</span>
-                                        </div>
-
-                                        {currentData.totalPay && (
-                                            <CardDescription className="text-xs text-black/70 mt-1">{currentData.totalPay}</CardDescription>
-                                        )}
-                                        {currentData.badgeNote && (
-                                            <CardDescription className="text-xs font-medium text-black mt-1">{currentData.badgeNote}</CardDescription>
-                                        )}
-                                    </CardHeader>
-
-                                    <CardContent className="space-y-4">
-                                        <hr className="border-dashed border-gray-200" />
-                                        <ul className="list-outside space-y-3 text-sm text-black">
-                                            {[
-                                                '1 website',
-                                                'Free domain for 1 year',
-                                                '10 GB NVMe storage',
-                                                '1 email account Free forever',
-                                                'Daily backups',
-                                                'Free SSL for your website',
-                                                'WordPress ready',
-                                                'AI builder 50 credits',
-                                                'AI agent for WordPress',
-                                                'Priority 24/7 expert support'
-                                            ].map((item, index) => (
-                                                <FeatureItem key={index} item={item} />
-                                            ))}
-                                        </ul>
-                                    </CardContent>
-                                </div>
-
-                                <CardFooter className="mt-auto pt-4">
-                                    <Button className="w-full bg-black text-white hover:bg-black/90">
-                                        <Link href="/">Choose Plan</Link>
-                                    </Button>
-                                </CardFooter>
-                            </Card>
-                        )
-                    })()}
-
-                    {/* Premium Card */}
-                    {(() => {
-                        const currentData = plansData[billingCycle]['Premium']
-                        return (
-                            <Card className="min-w-[85vw] sm:min-w-[320px] md:min-w-0 snap-center shrink-0 relative flex flex-col justify-between overflow-visible border-black bg-white text-black ring-1 ring-black transition-all duration-300 hover:-translate-y-2 hover:scale-105 hover:shadow-2xl cursor-pointer">
-                                <span className="absolute -top-3 inset-x-0 mx-auto flex h-6 w-fit items-center rounded-full bg-green-500 px-3 py-1 text-xs font-medium text-black ring-1 ring-inset ring-white/20 z-10">
-                                    MOST POPULAR
-                                </span>
-
-                                <div>
-                                    <CardHeader>
-                                        <CardTitle className="font-medium text-black">Premium</CardTitle>
-                                        <CardDescription className="text-sm text-black/70">Best for blogs & startup websites.</CardDescription>
-
-                                        {currentData.discount && (
-                                            <span className="mt-2 w-fit rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
-                                                {currentData.discount}
-                                            </span>
-                                        )}
-
-                                        <div className="my-3 flex items-baseline gap-2">
-                                            {currentData.originalPrice && (
-                                                <span className="text-sm text-black/50 line-through">₹{currentData.originalPrice}</span>
-                                            )}
-                                            <span className="text-2xl font-semibold text-black">₹{currentData.price}</span>
-                                            <span className="text-sm text-black/70">/mo</span>
-                                        </div>
-
-                                        {currentData.totalPay && (
-                                            <CardDescription className="text-xs text-black/70 mt-1">{currentData.totalPay}</CardDescription>
-                                        )}
-                                        {currentData.badgeNote && (
-                                            <CardDescription className="text-xs font-medium text-black mt-1">{currentData.badgeNote}</CardDescription>
-                                        )}
-                                    </CardHeader>
-
-                                    <CardContent className="space-y-4">
-                                        <hr className="border-dashed border-gray-200" />
-                                        <ul className="list-outside space-y-3 text-sm text-black">
-                                            {[
-                                                '25 websites',
-                                                'Free domain for 1 year',
-                                                '50 GB NVMe storage',
-                                                '50 email accounts Free forever',
-                                                'Daily backups',
-                                                'Free SSL for every website',
-                                                'WordPress ready',
-                                                'AI builder 50 credits',
-                                                'AI agent for WordPress',
-                                                'Priority 24/7 expert support'
-                                            ].map((item, index) => (
-                                                <FeatureItem key={index} item={item} />
-                                            ))}
-                                        </ul>
-                                    </CardContent>
-                                </div>
-
-                                <CardFooter className="mt-auto pt-4">
-                                    <Button className="w-full bg-black text-white hover:bg-black/90">
-                                        <Link href="/">Choose Plan</Link>
-                                    </Button>
-                                </CardFooter>
-                            </Card>
-                        )
-                    })()}
-
-                    {/* Business Card */}
-                    {(() => {
-                        const currentData = plansData[billingCycle]['Business']
-                        return (
-                            <Card className="min-w-[85vw] sm:min-w-[320px] md:min-w-0 snap-center shrink-0 flex flex-col justify-between border-gray-200 bg-white text-black transition-all duration-300 hover:-translate-y-2 hover:scale-105 hover:shadow-2xl cursor-pointer">
-                                <div>
-                                    <CardHeader>
-                                        <CardTitle className="font-medium text-black">Business</CardTitle>
-                                        <CardDescription className="text-sm text-black/70">Node.js ready hosting.</CardDescription>
-
-                                        {currentData.discount && (
-                                            <span className="mt-2 w-fit rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
-                                                {currentData.discount}
-                                            </span>
-                                        )}
-
-                                        <div className="my-3 flex items-baseline gap-2">
-                                            {currentData.originalPrice && (
-                                                <span className="text-sm text-black/50 line-through">₹{currentData.originalPrice}</span>
-                                            )}
-                                            <span className="text-2xl font-semibold text-black">₹{currentData.price}</span>
-                                            <span className="text-sm text-black/70">/mo</span>
-                                        </div>
-
-                                        {currentData.totalPay && (
-                                            <CardDescription className="text-xs text-black/70 mt-1">{currentData.totalPay}</CardDescription>
-                                        )}
-                                        {currentData.badgeNote && (
-                                            <CardDescription className="text-xs font-medium text-black mt-1">{currentData.badgeNote}</CardDescription>
-                                        )}
-                                    </CardHeader>
-
-                                    <CardContent className="space-y-4">
-                                        <hr className="border-dashed border-gray-200" />
-                                        <ul className="list-outside space-y-3 text-sm text-black">
-                                            {[
-                                                '50 websites',
-                                                'Free domain for 1 year',
-                                                '100 GB NVMe storage',
-                                                '150 email accounts Free forever',
-                                                'Daily & On-Demand Backups',
-                                                'Free SSL for every website',
-                                                'WordPress ready',
-                                                'AI builder 50 credits',
-                                                'AI agent for WordPress',
-                                                'Priority 24/7 expert support',
-                                                '5 Node.js web apps New'
-                                            ].map((item, index) => (
-                                                <FeatureItem key={index} item={item} />
-                                            ))}
-                                        </ul>
-                                    </CardContent>
-                                </div>
-
-                                <CardFooter className="mt-auto pt-4">
-                                    <Button className="w-full bg-black text-white hover:bg-black/90">
-                                        <Link href="/">Choose Plan</Link>
-                                    </Button>
-                                </CardFooter>
-                            </Card>
-                        )
-                    })()}
-
-                    {/* Cloud Startup Card */}
-                    {(() => {
-                        const currentData = plansData[billingCycle]['Cloud Startup']
-                        return (
-                            <Card className="min-w-[85vw] sm:min-w-[320px] md:min-w-0 snap-center shrink-0 flex flex-col justify-between border-gray-200 bg-white text-black transition-all duration-300 hover:-translate-y-2 hover:scale-105 hover:shadow-2xl cursor-pointer">
-                                <div>
-                                    <CardHeader>
-                                        <CardTitle className="font-medium text-black">Cloud Startup</CardTitle>
-                                        <CardDescription className="text-sm text-black/70">20x more power with cloud hosting.</CardDescription>
-
-                                        {currentData.discount && (
-                                            <span className="mt-2 w-fit rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
-                                                {currentData.discount}
-                                            </span>
-                                        )}
-
-                                        <div className="my-3 flex items-baseline gap-2">
-                                            {currentData.originalPrice && (
-                                                <span className="text-sm text-black/50 line-through">₹{currentData.originalPrice}</span>
-                                            )}
-                                            <span className="text-2xl font-semibold text-black">₹{currentData.price}</span>
-                                            <span className="text-sm text-black/70">/mo</span>
-                                        </div>
-
-                                        {currentData.totalPay && (
-                                            <CardDescription className="text-xs text-black/70 mt-1">{currentData.totalPay}</CardDescription>
-                                        )}
-                                        {currentData.badgeNote && (
-                                            <CardDescription className="text-xs font-medium text-black mt-1">{currentData.badgeNote}</CardDescription>
-                                        )}
-                                    </CardHeader>
-
-                                    <CardContent className="space-y-4">
-                                        <hr className="border-dashed border-gray-200" />
-                                        <ul className="list-outside space-y-3 text-sm text-black">
-                                            {[
-                                                '50 websites',
-                                                'Free domain for 1 year',
-                                                '100 GB NVMe storage',
-                                                '150 email accounts Free forever',
-                                                'Daily & On-Demand Backups',
-                                                'Free SSL for every website',
-                                                'WordPress ready',
-                                                'AI builder 50 credits',
-                                                'AI agent for WordPress',
-                                                'Priority 24/7 expert support',
-                                                '5 Node.js web apps New'
-                                            ].map((item, index) => (
-                                                <FeatureItem key={index} item={item} />
-                                            ))}
-                                        </ul>
-                                    </CardContent>
-                                </div>
-
-                                <CardFooter className="mt-auto pt-4">
-                                    <Button className="w-full bg-black text-white hover:bg-black/90">
-                                        <Link href="/">Choose Plan</Link>
-                                    </Button>
-                                </CardFooter>
-                            </Card>
-                        )
-                    })()}
-
+                    {planConfigs.map((plan) => (
+                        <div
+                            key={plan.key}
+                            className="w-[76vw] min-w-[76vw] snap-center shrink-0 md:w-auto md:min-w-0"
+                        >
+                            <PlanCard plan={plan} currentData={plansData[billingCycle][plan.key]} />
+                        </div>
+                    ))}
                 </div>
+                </TooltipProvider>
 
-                {/* Mobile 4-Dot Carousel Indicators */}
                 <div className="mt-4 flex justify-center gap-2 md:hidden">
-                    {[0, 1, 2, 3].map((index) => (
+                    {planConfigs.map((plan, index) => (
                         <button
-                            key={index}
+                            key={plan.key}
                             onClick={() => scrollToCard(index)}
-                            aria-label={`Go to slide ${index + 1}`}
+                            aria-label={`Go to ${plan.title} plan`}
                             className={`h-2.5 rounded-full transition-all duration-300 ${
                                 activeCardIndex === index
-                                    ? 'w-6 bg-black'
+                                    ? 'w-6 bg-[#1e3a8a]'
                                     : 'w-2.5 bg-gray-300 hover:bg-gray-400'
                             }`}
                         />

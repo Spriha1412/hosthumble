@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, Check, Play, Shield } from "lucide-react";
 import { Button } from "./ui/button";
 
@@ -25,28 +24,27 @@ export default function HeroSection() {
   }, [currentVideoIndex]);
 
   return (
-    <main className="overflow-hidden min-h-screen">
+    <main className="overflow-x-clip">
       <section className="relative flex items-center justify-center">
-        <div className="relative py-15 lg:py-15 w-full">
+        <div className="relative w-full py-8 lg:py-10">
           <div className="mx-auto max-w-7xl px-6 md:px-12">
+            <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
 
-            {/* Modified Grid: Gives the right column ~30% more breathing room on desktop sizes */}
-            <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
-
-              {/* Left Column: Content */}
-              <div className="flex flex-col items-start text-left w-full">
-                {/* Offer Badge */}
-                <Link
-                  href="/"
-                  className="rounded-(--radius) flex w-fit items-center gap-2 border border-primary/60 bg-background/50 p-1 pr-3 text-sm font-medium shadow-[0_0_12px_rgba(var(--primary),0.3)] ring-1 ring-primary/40 transition-all duration-300 hover:border-primary hover:ring-primary hover:shadow-[0_0_20px_rgba(var(--primary),0.6)]"
-                >
-                  <span className="bg-green-500 text-primary rounded-full px-2 py-0.5 text-xs font-semibold">
+              <div className="flex w-full flex-col items-start text-left">
+                <div className="relative mt-3 inline-flex max-w-full pt-2.5">
+                  <span className="absolute -top-2 left-4 z-20 inline-flex items-center rounded-full bg-[#4169E1] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-[0_6px_14px_-6px_rgba(65,105,225,0.85)] ring-2 ring-white sm:text-[11px]">
                     Offer
                   </span>
-                  <span>Get 80% Off Hosting with Free Domain</span>
-                  <span className="bg-primary/30 block h-4 w-px"></span>
-                  <ArrowRight className="size-4" />
-                </Link>
+                  <Link
+                    href="#pricing"
+                    className="group relative inline-flex max-w-full items-center gap-2 rounded-full border border-[#4169E1]/25 bg-white py-2.5 pl-4 pr-3 shadow-[0_10px_28px_-16px_rgba(30,58,138,0.45)] transition-all duration-300 hover:border-[#4169E1]/50 hover:shadow-[0_14px_32px_-14px_rgba(30,58,138,0.5)] sm:gap-2.5 sm:pr-4"
+                  >
+                    <span className="min-w-0 text-[13px] font-medium leading-snug text-slate-800 sm:text-sm">
+                      Get 80% Off Hosting with Free Domain
+                    </span>
+                    <ArrowRight className="size-3.5 shrink-0 text-[#1e3a8a] transition-transform duration-300 group-hover:translate-x-0.5 sm:size-4" />
+                  </Link>
+                </div>
 
                 <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl xl:text-6xl font-sans">
                   Launch your website in minutes
@@ -78,32 +76,28 @@ export default function HeroSection() {
                 <div className="mt-5 rounded-lg text-center w-full sm:w-48">
                   <Button
                     size="lg"
-                    className="w-full bg-black text-white hover:bg-black hover:text-white"
+                    className="w-full bg-gradient-to-r from-[#061433] to-[#1e3a8a] text-white hover:from-[#0a2463] hover:to-[#1e3a8a] hover:text-white"
                   >
                     <Link href="/" className="w-full h-full flex items-center justify-center">
                       Start Now
                     </Link>
                   </Button>
                 </div>
-                <div className="mt-3 flex items-center gap-2">
-                  <Shield className="text-green-500 h-5 w-5 shrink-0" />
-                  <span className="text-md font-bold">
-                    30-day money-back guarantee • Cancel anytime
+                <div className="mt-6 flex items-center gap-2">
+                  <Shield className="h-5 w-5 shrink-0 text-[#1e3a8a]" />
+                  <span className="text-sm font-semibold text-slate-700">
+                    30-day money-back guarantee
                   </span>
                 </div>
               </div>
 
-              {/* Right Column: Stacked Vertical Folder (Hidden on Mobile) */}
-              <div className="hidden lg:flex relative items-center justify-center lg:justify-end w-full h-full py-12">
+              <div className="relative hidden h-full w-full items-center justify-center py-6 lg:flex lg:justify-end">
                 <div className="relative w-full xl:max-w-5xl aspect-[21/9] sm:aspect-video">
                   {videos.map((src, index) => {
-                    // Calculate relative offset position from active item
                     const offset = (index - currentVideoIndex + videos.length) % videos.length;
                     const isActive = offset === 0;
-
-                    // Dynamic styles: negative translateY moves upcoming cards UP to peek out top
-                    const translateY = -offset * 28; // Negative shift to stack towards top
-                    const scale = 1 - offset * 0.05; // Slightly shrink top background cards
+                    const translateY = -offset * 28;
+                    const scale = 1 - offset * 0.05;
                     const opacity = offset === 0 ? 1 : offset === 1 ? 0.7 : 0.4;
 
                     return (

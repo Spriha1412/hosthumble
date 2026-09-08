@@ -2,7 +2,7 @@ import { Star } from "lucide-react";
 
 export default function TrustBadge() {
   return (
-    <div className="flex items-center justify-center md:justify-between gap-6 md:gap-8 rounded-2xl bg-white px-6 py-4 shadow-lg shadow-black/5 border border-gray-100 max-w-4xl mx-auto w-fit md:w-full">
+    <div className="mx-auto flex w-full max-w-5xl items-center justify-center gap-6 rounded-2xl border border-gray-100 bg-white px-5 py-3.5 shadow-lg shadow-black/5 sm:px-6 md:justify-between md:gap-8 md:py-4">
       {/* Section 1: Google Rating (Visible on all screen sizes) */}
       <div className="flex items-center gap-3">
         {/* Google Logo SVG */}
