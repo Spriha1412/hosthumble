@@ -82,7 +82,7 @@ export default function IncludedFeatures() {
                   type="button"
                   onMouseEnter={() => activateCard(index)}
                   onFocus={() => activateCard(index)}
-                  onClick={() => setActiveIndex(index)}
+                  onClick={() => activateCard(index)}
                   className={cn(
                     "feature-bento-item flex min-h-[148px] min-w-0 flex-col items-start overflow-hidden rounded-2xl border p-5 text-left outline-none md:h-full md:min-h-0 sm:p-6",
                     "focus-visible:ring-2 focus-visible:ring-[#4169E1]/40",

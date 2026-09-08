@@ -68,13 +68,15 @@ const Navbar = () => {
     <header>
       <nav>
         <div className="flex min-h-24 w-full flex-row flex-wrap items-center justify-between px-6 lg:justify-evenly">
-          <div className="flex w-auto items-center lg:w-60">
+          <div className="flex w-auto items-center lg:min-w-60">
             <Link
               href="/"
               aria-label="home"
               className="flex items-center gap-[3px]"
             >
-              <span className="-ml-0.9 text-lg font-bold">Host Humble</span>
+              <span className="text-2xl font-bold tracking-tight sm:text-3xl">
+                Host Humble
+              </span>
             </Link>
           </div>
 

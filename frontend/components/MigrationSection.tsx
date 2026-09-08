@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Check, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const features = [
   "Free website migrations by qualified experts",
@@ -12,13 +13,81 @@ const features = [
   "Comprehensive post-migration testing",
 ];
 
+function WaveBand({
+  position,
+  fill,
+}: {
+  position: "top" | "bottom";
+  fill: string;
+}) {
+  return (
+    <div
+      aria-hidden
+      className={cn(
+        "pointer-events-none absolute inset-x-0 overflow-hidden leading-none",
+        position === "top" ? "top-0" : "bottom-0 rotate-180"
+      )}
+    >
+      <div className="relative h-16 w-full md:h-24">
+        <div className="wave-track absolute inset-y-0 left-0 flex h-full w-[200%]">
+          <svg
+            viewBox="0 0 1440 80"
+            preserveAspectRatio="none"
+            className="h-full w-1/2"
+          >
+            <path
+              d="M0,36 C180,80 360,4 540,40 C720,76 900,8 1080,36 C1260,64 1380,12 1440,32 L1440,0 L0,0 Z"
+              fill={fill}
+            />
+          </svg>
+          <svg
+            viewBox="0 0 1440 80"
+            preserveAspectRatio="none"
+            className="h-full w-1/2"
+          >
+            <path
+              d="M0,36 C180,80 360,4 540,40 C720,76 900,8 1080,36 C1260,64 1380,12 1440,32 L1440,0 L0,0 Z"
+              fill={fill}
+            />
+          </svg>
+        </div>
+        <div className="wave-track-slow absolute inset-y-0 left-0 flex h-full w-[200%] opacity-60">
+          <svg
+            viewBox="0 0 1440 80"
+            preserveAspectRatio="none"
+            className="h-full w-1/2"
+          >
+            <path
+              d="M0,48 C200,8 400,72 720,40 C1040,8 1240,72 1440,28 L1440,0 L0,0 Z"
+              fill={fill}
+            />
+          </svg>
+          <svg
+            viewBox="0 0 1440 80"
+            preserveAspectRatio="none"
+            className="h-full w-1/2"
+          >
+            <path
+              d="M0,48 C200,8 400,72 720,40 C1040,8 1240,72 1440,28 L1440,0 L0,0 Z"
+              fill={fill}
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function MigrationSection() {
   return (
-    <section className="relative overflow-hidden bg-black py-16 md:py-24 text-white">
+    <section className="relative overflow-hidden bg-black pt-24 pb-20 text-white md:pt-32 md:pb-28">
+      <WaveBand position="top" fill="#eef2ff" />
+      <WaveBand position="bottom" fill="#ffffff" />
+
       {/* Background radial gradient ambient light */}
       <div className="pointer-events-none absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-blue-600/15 blur-[120px]" />
 
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="relative z-10 mx-auto max-w-7xl px-6">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           
           {/* Left Column: Content */}

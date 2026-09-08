@@ -3,13 +3,14 @@ import Navbar from '@/components/Navbar'
 import React from 'react'
 import { usePathname } from 'next/navigation'
 import { DottedGlowBackground } from '@/components/ui/dotted-glow-background'
+import CursorAmbientBackground from '@/components/cursor-ambient-background'
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname()
-  console.log(pathname);
 
   return (
     <div className="relative min-h-screen overflow-x-clip bg-gradient-to-b from-white via-[#eef2ff] to-white">
+      <CursorAmbientBackground />
       {pathname === "/" && (
         <div className="hidden md:block absolute inset-x-0 top-0 h-[80vh] pointer-events-none z-0 overflow-hidden">
           <DottedGlowBackground

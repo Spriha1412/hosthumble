@@ -181,3 +181,27 @@
 .animate-border-glow {
   animation: border-glow-shift 4s linear infinite;
 }
+
+@keyframes wave-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.wave-track {
+  animation: wave-drift 14s linear infinite;
+}
+
+.wave-track-slow {
+  animation: wave-drift 22s linear infinite reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave-track,
+  .wave-track-slow {
+    animation: none;
+  }
+}

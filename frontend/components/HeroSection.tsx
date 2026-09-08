@@ -31,20 +31,18 @@ export default function HeroSection() {
             <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
 
               <div className="flex w-full flex-col items-start text-left">
-                <div className="relative mt-3 inline-flex max-w-full pt-2.5">
-                  <span className="absolute -top-2 left-4 z-20 inline-flex items-center rounded-full bg-[#4169E1] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-[0_6px_14px_-6px_rgba(65,105,225,0.85)] ring-2 ring-white sm:text-[11px]">
+                <Link
+                  href="#pricing"
+                  className="group mt-3 inline-flex max-w-full items-center gap-2 rounded-full border border-[#4169E1]/25 bg-white py-1.5 pl-1.5 pr-3 shadow-[0_10px_28px_-16px_rgba(30,58,138,0.45)] transition-all duration-300 hover:border-[#4169E1]/50 hover:shadow-[0_14px_32px_-14px_rgba(30,58,138,0.5)] sm:gap-2.5 sm:pr-4"
+                >
+                  <span className="inline-flex shrink-0 items-center rounded-full bg-[#4169E1] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-[0_6px_14px_-6px_rgba(65,105,225,0.85)] sm:text-[11px]">
                     Offer
                   </span>
-                  <Link
-                    href="#pricing"
-                    className="group relative inline-flex max-w-full items-center gap-2 rounded-full border border-[#4169E1]/25 bg-white py-2.5 pl-4 pr-3 shadow-[0_10px_28px_-16px_rgba(30,58,138,0.45)] transition-all duration-300 hover:border-[#4169E1]/50 hover:shadow-[0_14px_32px_-14px_rgba(30,58,138,0.5)] sm:gap-2.5 sm:pr-4"
-                  >
-                    <span className="min-w-0 text-[13px] font-medium leading-snug text-slate-800 sm:text-sm">
-                      Get 80% Off Hosting with Free Domain
-                    </span>
-                    <ArrowRight className="size-3.5 shrink-0 text-[#1e3a8a] transition-transform duration-300 group-hover:translate-x-0.5 sm:size-4" />
-                  </Link>
-                </div>
+                  <span className="min-w-0 text-[13px] font-medium leading-snug text-slate-800 sm:text-sm">
+                    Get 80% Off Hosting with Free Domain
+                  </span>
+                  <ArrowRight className="size-3.5 shrink-0 text-[#1e3a8a] transition-transform duration-300 group-hover:translate-x-0.5 sm:size-4" />
+                </Link>
 
                 <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl xl:text-6xl font-sans">
                   Launch your website in minutes

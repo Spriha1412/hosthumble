@@ -76,7 +76,6 @@ export default function FAQAndCTA() {
                   aria-expanded={isOpen}
                   onFocus={() => setOpenIndex(index)}
                   onClick={() => {
-                    if (canHover()) return;
                     setOpenIndex((current) => (current === index ? null : index));
                   }}
                   className="flex w-full items-center justify-between gap-4 py-4 text-left font-semibold text-gray-900 text-base md:text-lg"
